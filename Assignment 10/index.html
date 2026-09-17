@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MY App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h2>Hello, I'm your AI assistant!</h2>
+    <textarea
+      id="prompt"
+      type="text"
+      placeholder="Enter your Prompt"
+    ></textarea>
+
+    <button onclick="ask()">Sent</button>
+    <!--onclick="ask"- sent e click> js file ask funtion run -->
+    <div id="answer"></div>
+    <!-- id="answer" diye amra javascript theke ei div ke access korte parbo -->
+  </body>
+  <script>
+    async function ask() {
+      console.log("ask function called"); //sent button click korle ask funtion call hobe
+      document.getElementById("answer").innerText = "Thinking...";
+      const response = await fetch("/ai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          // convert text to string
+          prompt: document.getElementById("prompt").value,
+        }), //promt e ja dibo seta ei fetch er body te dhuke jabe
+      });
+      const data = await response.json(); //convert json to object, await = browser k server theke paowa response read and parse korte shomoy lage
+      console.log(data); //fetch request for /ai endpoint at own server & since fetch e wait korte hoi tai await -->
+      document.getElementById("answer").innerText = data.answer;
+    }
+  </script>
+</html>
